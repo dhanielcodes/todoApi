@@ -35,8 +35,15 @@ app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
+
+const uri = 'mongodb+srv://adekoyadaniel53:jrf62sOJKLE0u1h7@cluster0.polcmk8.mongodb.net/Nodeapp?retryWrites=true&w=majority&appName=Cluster0'
+
+
 const connectDb = async () => {
-  const client = new mongodb.MongoClient('mongodb+srv://adekoyadaniel53:jrf62sOJKLE0u1h7@cluster0.polcmk8.mongodb.net/Nodeapp?retryWrites=true&w=majority&appName=Cluster0')
+  const client = new mongodb.MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   await client.connect()
   db = client.db().collection('pets')
   app.listen(5034)
