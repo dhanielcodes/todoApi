@@ -55,7 +55,6 @@ connectDb()
 
 const passWordAuthenticate = (req, res, next) => {
   res.set('WWW-Authenticate', 'Basic realm="Simple Todo App"')
-  console.log(req.headers.authorization)
   if (req.headers.authorization == 'Basic RGhhbmllbDphZGU=') {
     next()
   } else {
@@ -80,7 +79,7 @@ const start = async (req, res) => {
   </head>
   <body>
     <div class="container">
-    <h1 class="display-4 text-center py-1">To-Do App!!!</h1>
+    <h1 class="display-4 text-center py-1">Pet Names</h1>
 
       <div class="jumbotron p-3 shadow-sm">
         <form id="form">
@@ -115,7 +114,7 @@ const createItem = async (req, res) => {
   if (req.body.name) {
     const insertedPost = await db.insertOne(req.body)
     const find = await db.findOne({ _id: insertedPost.insertedId })
-    res.status(200).send({ msg: 'item Created', data: find });
+    res.status(200).send({ msg: 'item Created', data: { ...find, dateCreated: new Date() } });
   } else {
     res.status(400).send({ error: 'Name is required' });
   }
