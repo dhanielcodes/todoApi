@@ -27,6 +27,7 @@ app.use(cors(corsOptions));
 */
 
 app.use(express.json())
+app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }))
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -52,9 +53,58 @@ const connectDb = async () => {
 connectDb()
 // Define the CORS options
 
+const passWordAuthenticate = (req, res, next) => {
+  res.set('WWW-Authenticate', 'Basic realm="Simple Todo App"')
+  console.log(req.headers.authorization)
+  if (req.headers.authorization == 'Basic RGhhbmllbDphZGU=') {
+    next()
+  } else {
+    res.status(401).send({ ['Status Message']: 'Unauthorized' })
+  }
+}
+app.use(passWordAuthenticate)
 
 const start = async (req, res) => {
-  res.send('Welcome to my api')
+  res.send(`
+    <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple To-Do App</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous" />
+  </head>
+  <body>
+    <div class="container">
+    <h1 class="display-4 text-center py-1">To-Do App!!!</h1>
+
+      <div class="jumbotron p-3 shadow-sm">
+        <form id="form">
+          <div class="d-flex align-items-center">
+            <input
+              autofocus
+              autocomplete="off"
+              name="name"
+              class="form-control mr-3"
+              id="name"
+              type="text"
+              style="flex: 1" />
+            <button class="btn btn-primary">Add New Item</button>
+          </div>
+        </form>
+      </div>
+      <ul class="list-group pb-5 ll"></ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="browser.js"></script>
+  </body>
+</html>
+
+    `)
 }
 
 const home = async (req, res) => {
@@ -84,8 +134,6 @@ const deleteItem = async (req, res) => {
   await db.findOneAndDelete({ name: req.body.name })
   res.status(200).send({ data: 'Item Deleted!' })
 }
-
-
 
 
 
