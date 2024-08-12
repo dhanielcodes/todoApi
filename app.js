@@ -131,6 +131,7 @@ const updateItem = async (req, res) => {
 
 const deleteItem = async (req, res) => {
   await db.findOneAndDelete({ name: req.body.name })
+  console.log(req.body)
   res.status(200).send({ data: `${req.body.name} Deleted` })
 }
 
