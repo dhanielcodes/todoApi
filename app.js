@@ -61,7 +61,7 @@ const passWordAuthenticate = (req, res, next) => {
     res.status(401).send({ ['Status Message']: 'Unauthorized' })
   }
 }
-app.use(passWordAuthenticate)
+//app.use(passWordAuthenticate)
 
 const start = async (req, res) => {
   res.send(`
