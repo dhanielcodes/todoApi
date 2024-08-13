@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
@@ -107,6 +107,7 @@ const start = async (req, res) => {
 }
 
 const home = async (req, res) => {
+  console.log(req)
   const list = await db.find().toArray()
   res.status(200).send(responseBody(list))
 }
